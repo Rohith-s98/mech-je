@@ -1,0 +1,587 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Mech JE Topic Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: an engineering drawing sheet. Title block on top, eligibility strip, then a ranked parts list you tick off. */
+:root{
+  --paper:#f2f5f4; --sheet:#fbfcfc; --ink:#18222d; --muted:#5a6772; --line:#cbd3d6;
+  --accent:#1d5ca4; --accent-soft:#dbe7f5; --hot:#c46f00; --hot-soft:#fbecd6; --done:#2b8550; --warn:#b3261e;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0f1418; --sheet:#151c22; --ink:#e3e9ec; --muted:#93a1ab; --line:#2b3741;
+  --accent:#74abff; --accent-soft:#1b2c42; --hot:#ffb04d; --hot-soft:#3a2a12; --done:#5fc58c; --warn:#ff8a80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f1418; --sheet:#151c22; --ink:#e3e9ec; --muted:#93a1ab; --line:#2b3741;
+  --accent:#74abff; --accent-soft:#1b2c42; --hot:#ffb04d; --hot-soft:#3a2a12; --done:#5fc58c; --warn:#ff8a80; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.5 var(--body);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:24px 24px;background-position:-1px -1px}
+.wrap{max-width:860px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:18px}
+.sheet{background:var(--sheet);border:1.5px solid var(--ink)}
+.back{display:flex;flex-wrap:wrap;gap:4px 16px;font:600 14px var(--body)}
+.back a{color:var(--accent);text-decoration:none;min-height:24px}
+.back a:hover{text-decoration:underline}
+h1,h2,h3{font-family:var(--display);letter-spacing:.01em;text-wrap:balance;margin:0}
+.label{font:600 11px/1.2 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* title block */
+.tb{display:grid;grid-template-columns:2fr 1fr 1fr;}
+.tb>div{padding:10px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.tb>div:nth-child(3n){border-right:0}
+.tb .name{grid-row:span 2;display:flex;flex-direction:column;justify-content:flex-end;gap:4px}
+.tb h1{font-size:clamp(30px,7vw,44px);line-height:1;font-weight:700}
+.tb .val{font:600 15px/1.3 var(--mono)}
+.tb .sub{color:var(--muted);font-size:14px}
+@media (max-width:560px){.tb{grid-template-columns:1fr 1fr}.tb .name{grid-column:span 2;grid-row:auto}
+  .tb>div:nth-child(3n){border-right:1px solid var(--line)}.tb>div:nth-child(odd):not(.name){border-right:1px solid var(--line)}
+  .tb>div:nth-child(even){border-right:0}}
+
+/* eligibility */
+.elig{padding:14px 14px 6px}
+.elig h2{font-size:22px;margin-bottom:4px}
+.elig p{margin:0 0 10px;color:var(--muted);font-size:14.5px;max-width:65ch}
+.erow{display:grid;grid-template-columns:110px 1fr;gap:4px 12px;padding:10px 0;border-top:1px dashed var(--line)}
+.erow b{font-family:var(--display);font-size:19px;font-weight:600}
+.track{position:relative;height:22px;background:var(--paper);border:1px solid var(--line);margin-top:2px}
+.track .fill{position:absolute;inset:0 auto 0 0;background:var(--accent-soft);border-right:2px solid var(--accent)}
+.track .now{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.track .yrs{position:absolute;inset:0;display:flex;justify-content:space-between;padding:0 4px;font:10px/22px var(--mono);color:var(--muted)}
+.enote{font-size:14px;grid-column:2}
+.enote strong{color:var(--ink)}
+.tag{display:inline-block;font:600 11px/1 var(--mono);padding:3px 6px;border:1px solid currentColor;text-transform:uppercase;letter-spacing:.05em;vertical-align:1px}
+.tag.urgent{color:var(--warn)} .tag.ok{color:var(--done)}
+@media (max-width:480px){.erow{grid-template-columns:1fr}.enote{grid-column:1}}
+
+/* tabs */
+.tabs{display:flex;gap:0;border:1.5px solid var(--ink);background:var(--sheet);width:fit-content;max-width:100%}
+.tabs button{font:600 15px var(--body);padding:9px 16px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.tabs button+button{border-left:1.5px solid var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--sheet)}
+.tabs button:focus-visible,.subj summary:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.intro{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+.intro p{margin:0;font-size:14.5px;color:var(--muted);max-width:60ch}
+.prog{display:flex;align-items:center;gap:8px;font-size:14px}
+.prog .bar{width:120px;height:8px;background:var(--paper);border:1px solid var(--line)}
+.prog .bar i{display:block;height:100%;background:var(--done);width:0}
+
+/* subject list */
+.list{display:flex;flex-direction:column;gap:10px}
+.subj{background:var(--sheet);border:1.5px solid var(--ink)}
+.subj summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:44px 1fr;gap:0}
+.subj summary::-webkit-details-marker{display:none}
+.rank{font:700 26px/1 var(--display);display:flex;align-items:center;justify-content:center;border-right:1.5px solid var(--ink);background:var(--paper)}
+.shead{padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.stitle{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.stitle h3{font-size:21px;font-weight:600;line-height:1.15}
+.pct{font:600 20px/1 var(--mono);color:var(--accent);white-space:nowrap}
+.pct small{font-size:11px;color:var(--muted);font-weight:400}
+.cbar{height:10px;background:var(--paper);border:1px solid var(--line)}
+.cbar i{display:block;height:100%;background:var(--accent)}
+.exams{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ex{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ex .row{display:flex;justify-content:space-between;font-size:12.5px}
+.ex .row span:first-child{font:600 11px var(--mono);letter-spacing:.05em;color:var(--muted)}
+.ex .mini{height:4px;background:var(--paper)}
+.ex .mini i{display:block;height:100%;background:var(--muted)}
+.meta{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--muted)}
+.meta .tick{color:var(--done);font-weight:600}
+.chev{transition:transform .2s;display:inline-block}
+.subj[open] .chev{transform:rotate(90deg)}
+
+.body{border-top:1.5px solid var(--ink);padding:6px 14px 14px 58px}
+.body .why{font-size:14px;color:var(--muted);margin:8px 0 6px;max-width:65ch}
+.st{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;padding:9px 0;border-top:1px dashed var(--line)}
+.st:first-of-type{border-top:0}
+.st input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--done)}
+.st label{cursor:pointer;font-size:15px;min-width:0}
+.st label small{display:block;color:var(--muted);font-size:13px}
+.st.done label{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.tier{font:600 10.5px/1 var(--mono);padding:4px 6px;letter-spacing:.06em;white-space:nowrap}
+.tier.H{background:var(--hot-soft);color:var(--hot);border:1px solid var(--hot)}
+.tier.M{color:var(--accent);border:1px solid var(--accent)}
+.tier.L{color:var(--muted);border:1px solid var(--line)}
+@media (max-width:480px){.body{padding-left:14px}.subj summary{grid-template-columns:36px 1fr}.rank{font-size:22px}}
+
+/* general tab table */
+.gen{background:var(--sheet);border:1.5px solid var(--ink);padding:14px}
+.gen h3{font-size:21px;margin-bottom:6px}
+.tscroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:460px}
+th,td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.notes{font-size:13.5px;color:var(--muted);padding:14px}
+.notes h2{font-size:18px;color:var(--ink);margin-bottom:6px}
+.notes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.notes a{color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted);align-items:center}
+
+/* exam calendar */
+.cal{display:flex;flex-direction:column;gap:0;border:1.5px solid var(--ink);background:var(--sheet)}
+.ev{display:grid;grid-template-columns:96px 1fr;border-top:1px solid var(--line)}
+.ev:first-child{border-top:0}
+.when{padding:12px 10px;border-right:1.5px solid var(--ink);background:var(--paper);display:flex;flex-direction:column;gap:2px}
+.when .m{font:700 20px/1 var(--display)}
+.when .y{font:600 12px var(--mono);color:var(--muted)}
+.evb{padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.evh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;justify-content:space-between}
+.evh h3{font-size:21px;font-weight:600;line-height:1.15}
+.evb p{margin:0;font-size:14.5px;max-width:65ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:4px 14px;font-size:13.5px}
+.facts div span{display:block;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.chip{font:600 11px/1 var(--mono);padding:4px 7px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;border:1px solid currentColor}
+.chip.now{color:var(--sheet);background:var(--warn);border-color:var(--warn)}
+.chip.last{color:var(--hot);background:var(--hot-soft)}
+.chip.rec{color:var(--done)}
+.chip.watch{color:var(--accent)}
+.kind{font:600 11px var(--mono);color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);background:var(--sheet)}
+.summary div{padding:12px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.summary div:last-child{border-right:0}
+.summary b{font:700 34px/1 var(--display)}
+.summary span{font-size:13px;color:var(--muted)}
+@media (max-width:480px){.ev{grid-template-columns:72px 1fr}.when .m{font-size:17px}.summary b{font-size:28px}}
+
+/* exam directory */
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.trk{background:var(--sheet);border:1.5px solid var(--ink);padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.trk .tl{display:flex;align-items:baseline;gap:8px}
+.trk .tl b{font:700 22px/1 var(--display);width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;background:var(--ink);color:var(--sheet);font-size:16px}
+.trk h3{font-size:19px;font-weight:600}
+.trk p{margin:0;font-size:14px;color:var(--muted)}
+.trk .rec{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.trk .rec.p1{color:var(--done)} .trk .rec.p2{color:var(--accent)} .trk .rec.p3{color:var(--muted)}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters button{font:600 13px var(--body);padding:6px 11px;border:1.5px solid var(--ink);background:var(--sheet);color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.filters button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.dir{display:flex;flex-direction:column;border:1.5px solid var(--ink);background:var(--sheet)}
+.ex2{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:12px 14px;border-top:1px solid var(--line)}
+.ex2:first-child{border-top:0}
+.ex2.closed{opacity:.72}
+.ex2 h4{margin:0;font:600 18px/1.2 var(--display);letter-spacing:.01em}
+.ex2 .sub{font:600 11px var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.ex2 .info{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:4px 14px;font-size:13.5px}
+.ex2 .info div span{display:block;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ex2 .note{grid-column:1/-1;margin:0;font-size:13.5px;color:var(--muted);max-width:70ch}
+.chip.no{color:var(--muted)}
+.trkb{font:700 12px/1 var(--mono);border:1px solid var(--ink);padding:3px 5px;margin-right:6px}
+.empty{padding:16px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+</style>
+
+<div class="wrap">
+  <nav class="back" aria-label="Site"><a href="../">← All topics</a></nav>
+  <header class="sheet tb">
+    <div class="name"><span class="label">Drawing title</span><h1>Mech JE Topic Map</h1><span class="sub">Common syllabus, ranked by how often it is asked</span></div>
+    <div><div class="label">Exams</div><div class="val">RRB · SSC · KPSC · UPSC · Banks</div></div>
+    <div><div class="label">Branch</div><div class="val">Mechanical</div></div>
+    <div><div class="label">Age rules</div><div class="val">General category</div></div>
+    <div><div class="label">Drawn</div><div class="val">27-10-2026</div></div>
+  </header>
+
+  <section class="sheet elig" aria-labelledby="elig-h">
+    <h2 id="elig-h">How long each door stays open</h2>
+    <p>General-category upper age limits from the latest notifications. Shaded bar = years you remain eligible; the black line is today. OBC/SC/ST relaxation adds 3–5 years.</p>
+    <div class="erow">
+      <b>SSC JE</b>
+      <div class="track"><div class="fill" style="width:20%"></div><div class="now" style="left:10%"></div><div class="yrs"><span>2026</span><span>2028</span><span>2030</span><span>2032</span><span>2034</span></div></div>
+      <div class="enote"><span class="tag urgent">Last chance: 2027</span> Mechanical posts (CWC, MES, BRO, DGQA) cap at <strong>30 years on 1 August</strong>. You are 28 now, 29 in Aug 2027, and over 30 by Aug 2028. You did not apply in 2026, so <strong>SSC JE 2027 is your last SSC JE chance.</strong></div>
+    </div>
+    <div class="erow">
+      <b>RRB JE</b>
+      <div class="track"><div class="fill" style="width:62%"></div><div class="now" style="left:10%"></div><div class="yrs"><span>2026</span><span>2028</span><span>2030</span><span>2032</span><span>2034</span></div></div>
+      <div class="enote"><span class="tag ok">Wide window</span> 18–33 years on 1 January. You stay under 33 for notifications dated up to about 1 Jan 2031, so roughly <strong>4–5 more cycles</strong>. The current one (CEN 04/2026) closed applications on 13 Sep 2026.</div>
+    </div>
+    <div class="erow">
+      <b>Kerala PSC</b>
+      <div class="track"><div class="fill" style="width:100%"></div><div class="now" style="left:10%"></div><div class="yrs"><span>2026</span><span>2028</span><span>2030</span><span>2032</span><span>2034</span></div></div>
+      <div class="enote"><span class="tag ok">Longest</span> Assistant Engineer posts are <strong>18–36</strong> (reckoned on 1 January), so you can apply till about 2034. Some corporation AE posts allow up to 39.</div>
+    </div>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tab-all" aria-selected="true" aria-controls="pane-all">All exams</button>
+    <button role="tab" id="tab-cal" aria-selected="false" aria-controls="pane-cal">Timeline</button>
+    <button role="tab" id="tab-tech" aria-selected="false" aria-controls="pane-tech">Technical</button>
+    <button role="tab" id="tab-gen" aria-selected="false" aria-controls="pane-gen">General section</button>
+  </div>
+
+  <section id="pane-all" role="tabpanel" aria-labelledby="tab-all" style="display:flex;flex-direction:column;gap:12px">
+    <div class="summary">
+      <div><b class="num" id="cntT">0</b><span>technical exams still open to you</span></div>
+      <div><b class="num" id="cntN">0</b><span>non-technical exams still open</span></div>
+      <div><b class="num" id="cntC">0</b><span>closed by age (skip these)</span></div>
+    </div>
+    <p style="margin:0;color:var(--muted);font-size:14.5px;max-width:68ch">Every exam is checked against your date of birth using the latest notification's general-category age rule. Exams sharing a syllabus are grouped into five prep tracks, because you can realistically prepare for one or two tracks at a time.</p>
+    <div class="tracks">
+      <div class="trk"><div class="tl"><b>A</b><h3>Mechanical JE track</h3></div><span class="rec p1">Main track</span><p>Your degree is your edge here, and the topic map covers it. RRB JE, SSC JE, ALP, Kerala PSC AE, ISRO, ESE.</p></div>
+      <div class="trk"><div class="tl"><b>B</b><h3>Railway &amp; SSC general</h3></div><span class="rec p1">Pair with A</span><p>Maths, reasoning and GA. Already needed for RRB JE CBT-1 and SSC JE Paper 1, so NTPC and CGL cost little extra.</p></div>
+      <div class="trk"><div class="tl"><b>C</b><h3>Banking &amp; insurance</h3></div><span class="rec p2">Only if you want a bank career</span><p>English, quant, reasoning. Several last chances fall in 2027, but the syllabus is separate from A.</p></div>
+      <div class="trk"><div class="tl"><b>D</b><h3>Civil services &amp; police</h3></div><span class="rec p3">Needs full-time commitment</span><p>UPSC CSE, KAS, Kerala SI. Three CSE attempts left; a year or more of dedicated prep each.</p></div>
+      <div class="trk"><div class="tl"><b>E</b><h3>Kerala PSC general</h3></div><span class="rec p2">Long-term backup</span><p>Degree-level prelims and other Kerala posts. Open until about 2034, so there is no rush.</p></div>
+    </div>
+    <div class="filters" role="group" aria-label="Filter exams">
+      <button data-f="open" aria-pressed="true">Open to you</button>
+      <button data-f="T">Technical</button>
+      <button data-f="N">Non-technical</button>
+      <button data-f="last">Last chance</button>
+      <button data-f="closed">Closed by age</button>
+      <button data-f="all">Everything</button>
+    </div>
+    <div class="dir" id="dir"></div>
+  </section>
+
+  <section id="pane-cal" role="tabpanel" aria-labelledby="tab-cal" hidden style="display:flex;flex-direction:column;gap:12px">
+    <div class="summary">
+      <div><b class="num">1</b><span>exam open to apply today</span></div>
+      <div><b class="num">3</b><span>last-chance technical exams (ALP, SSC JE, ESE)</span></div>
+      <div><b class="num">20+</b><span>exams in total; see All exams</span></div>
+    </div>
+    <p style="margin:0;color:var(--muted);font-size:14.5px;max-width:65ch">Ordered by when the notification is expected, from today (27 Oct 2026) to the end of 2027. Dates beyond today are estimates from last year's cycle and coaching calendars; confirm on the official site when each one opens.</p>
+    <div class="cal">
+      <div class="ev"><div class="when"><span class="m">By 6 Nov</span><span class="y">2026</span></div><div class="evb">
+        <div class="evh"><h3>RRB NTPC Graduate (CEN 06/2026)</h3><span class="chip now">Apply now</span></div>
+        <span class="kind">Non-technical · any degree</span>
+        <p>The only big exam still open today. Station master, goods guard, clerk and similar posts. Maths, reasoning and GA overlap with RRB JE CBT-1, so the prep is shared.</p>
+        <div class="facts"><div><span>Apply</span>8 Oct – 6 Nov 2026</div><div><span>Age rule</span>18–33 on 1 Jan 2027</div><div><span>You</span>28 · eligible</div><div><span>Exam</span>CBT dates to be announced</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Early–mid</span><span class="y">2027</span></div><div class="evb">
+        <div class="evh"><h3>RRB ALP 2027</h3><span class="chip last">Last chance</span></div>
+        <span class="kind">Technical · Mech diploma/degree accepted in lieu of ITI</span>
+        <p>Assistant Loco Pilot. The 2026 cycle (11,127 posts) opened on 15 May 2026, so expect the next one around the same time. CBT-2 Part B is basic mechanical, which your topic map already covers.</p>
+        <div class="facts"><div><span>Expected</span>Notification Feb–May 2027</div><div><span>Age rule</span>18–30 on 1 Jul</div><div><span>You</span>29 in Jul 2027 · eligible</div><div><span>After that</span>Over 30 by Jul 2028</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Jan</span><span class="y">2027</span></div><div class="evb">
+        <div class="evh"><h3>UPSC Civil Services 2027</h3><span class="chip rec">3 attempts left</span></div>
+        <span class="kind">Non-technical · any degree</span>
+        <p>Notification 13 Jan 2027, apply by 2 Feb, prelims 23 May 2027. Only worth it if you can commit to it full-time.</p>
+        <div class="facts"><div><span>Age rule</span>21–32 on 1 Aug</div><div><span>You</span>Eligible for 2027, 2028, 2029</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Apr–Jul</span><span class="y">2027</span></div><div class="evb">
+        <div class="evh"><h3>Bank officer exams: RBI Grade B, SBI PO, IBPS PO</h3><span class="chip last">Last chance</span></div>
+        <span class="kind">Non-technical · any degree</span>
+        <p>All three have a 30-year limit. RBI Grade B and IBPS PO 2027 are your last; SBI PO may give you 2028 too.</p>
+        <div class="facts"><div><span>Age rule</span>Up to 30</div><div><span>Prep</span>English, quant, reasoning, GA</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">2027</span><span class="y">Mar–Sep</span></div><div class="evb">
+        <div class="evh"><h3>SSC JE 2027</h3><span class="chip last">Last chance</span></div>
+        <span class="kind">Technical · Mech degree or diploma</span>
+        <p>Your last SSC JE. Coaching calendars expect a spring notification, but the 2026 cycle slipped to September, so watch from March onward and keep your OTR on the new SSC portal ready.</p>
+        <div class="facts"><div><span>Expected</span>Notification Mar–Sep 2027</div><div><span>Age rule</span>Up to 30 on 1 Aug (mech posts)</div><div><span>You</span>29 in Aug 2027 · eligible</div><div><span>After that</span>Over 30 by Aug 2028</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Mid</span><span class="y">2027</span></div><div class="evb">
+        <div class="evh"><h3>SSC CGL 2027</h3><span class="chip rec">Recurring</span></div>
+        <span class="kind">Non-technical · any degree</span>
+        <p>Inspector, assistant and auditor posts. The 2026 notification came on 21 May 2026. Many posts allow up to 30 or 32 years, so this stays open for a few more years.</p>
+        <div class="facts"><div><span>Expected</span>Notification May–Jun 2027</div><div><span>Age rule</span>18–27 to 32, by post</div><div><span>You</span>29 · eligible for most posts</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Jul–Aug</span><span class="y">2027</span></div><div class="evb">
+        <div class="evh"><h3>RRB JE 2027</h3><span class="chip rec">Recurring</span></div>
+        <span class="kind">Technical · Mech degree or diploma</span>
+        <p>The 2026 cycle (CEN 04/2026) was notified in July–August 2026. The topic map is built around this paper, so it is the exam to aim your mechanical prep at.</p>
+        <div class="facts"><div><span>Expected</span>Notification Jul–Aug 2027</div><div><span>Age rule</span>18–33 on 1 Jan</div><div><span>You</span>29 · eligible</div><div><span>Window</span>About 4–5 more cycles</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Sep</span><span class="y">2027</span></div><div class="evb">
+        <div class="evh"><h3>UPSC ESE 2028</h3><span class="chip last">Last chance</span></div>
+        <span class="kind">Technical · Mech degree only</span>
+        <p>Engineering Services, Group A posts. Much harder than JE exams, but the core subjects are the same. Optional: only worth it if your JE prep is going well by mid-2027.</p>
+        <div class="facts"><div><span>Expected</span>Notification ~Sep 2027, prelims ~Feb 2028</div><div><span>Age rule</span>21–30 on 1 Jan</div><div><span>You</span>29 on 1 Jan 2028 · eligible</div><div><span>After that</span>Over 30 for ESE 2029</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Any month</span><span class="y">2026–27</span></div><div class="evb">
+        <div class="evh"><h3>Kerala PSC: AE (Mechanical) and other technical posts</h3><span class="chip watch">Watch monthly</span></div>
+        <span class="kind">Technical · degree (AE) or diploma (Overseer, Sub Engineer)</span>
+        <p>Kerala PSC publishes AE Mechanical posts irregularly across departments. Recent ones: Kerala Ports Hydrographic Wing (539/2025), Irrigation (541/2025), Universities (276/2024). Check the PSC gazette notifications every month.</p>
+        <div class="facts"><div><span>Age rule</span>18–36 (some corporations 39)</div><div><span>You</span>Eligible till about 2034</div><div><span>Tip</span>Keep your One Time Registration profile updated</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Any month</span><span class="y">2026–27</span></div><div class="evb">
+        <div class="evh"><h3>Kerala PSC degree-level common prelims</h3><span class="chip watch">Watch monthly</span></div>
+        <span class="kind">Non-technical · any degree</span>
+        <p>One preliminary exam for many graduate posts such as University Assistant and Secretariat Assistant. A useful backup with the same 18–36 age window.</p>
+        <div class="facts"><div><span>Age rule</span>18–36</div><div><span>You</span>Eligible till about 2034</div></div></div></div>
+      <div class="ev"><div class="when"><span class="m">Ad hoc</span><span class="y">2026–27</span></div><div class="evb">
+        <div class="evh"><h3>Central jobs in Kerala</h3><span class="chip watch">Watch</span></div>
+        <span class="kind">Technical · varies</span>
+        <p>ISRO's VSSC and LPSC in Thiruvananthapuram, Cochin Shipyard and BPCL Kochi Refinery hire mechanical diploma and degree holders through their own exams a few times a year. Age limits and dates differ in every advertisement.</p>
+        <div class="facts"><div><span>Where</span>Each organisation's careers page</div><div><span>Tip</span>Check the age limit in each advert</div></div></div></div>
+    </div>
+  </section>
+
+  <section id="pane-tech" role="tabpanel" aria-labelledby="tab-tech" hidden style="display:flex;flex-direction:column;gap:12px">
+    <div class="intro">
+      <p>Each subject shows the average share of technical questions across the three exams, then the questions it got in each paper (out of 100). Tap a subject to see sub-topics and tick them off as you finish.</p>
+      <div class="prog"><span class="num" id="progTxt">0 / 0</span><div class="bar"><i id="progBar"></i></div></div>
+    </div>
+    <div class="legend"><span class="tier H">HIGH</span> asked almost every paper <span class="tier M">MED</span> regular <span class="tier L">LOW</span> occasional</div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section id="pane-gen" role="tabpanel" aria-labelledby="tab-gen" hidden style="flex-direction:column;gap:12px">
+    <div class="gen">
+      <h3>Non-technical marks by exam</h3>
+      <p style="margin:0 0 10px;color:var(--muted);font-size:14.5px">Kerala PSC degree-level AE papers are usually 100% technical, so this section matters most for RRB JE and SSC JE. Reasoning and General Awareness are the overlap.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>Section</th><th>RRB JE CBT-1</th><th>RRB JE CBT-2</th><th>SSC JE Paper 1</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td>Reasoning</td><td class="n">25 / 100</td><td class="n">—</td><td class="n">50 / 200</td><td><span class="tier H">HIGH</span></td></tr>
+          <tr><td>General Awareness</td><td class="n">15 / 100</td><td class="n">15 / 150</td><td class="n">50 / 200</td><td><span class="tier H">HIGH</span></td></tr>
+          <tr><td>General Science / Physics &amp; Chemistry</td><td class="n">30 / 100</td><td class="n">15 / 150</td><td class="n">—</td><td><span class="tier M">MED</span></td></tr>
+          <tr><td>Mathematics</td><td class="n">30 / 100</td><td class="n">—</td><td class="n">—</td><td><span class="tier M">MED</span></td></tr>
+          <tr><td>Computers + Environment</td><td class="n">—</td><td class="n">20 / 150</td><td class="n">—</td><td><span class="tier L">LOW</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="gen">
+      <h3>Reasoning sub-topics (RRB JE, questions per paper)</h3>
+      <div class="tscroll"><table><thead><tr><th>Topic</th><th>Qs</th><th>Topic</th><th>Qs</th></tr></thead><tbody>
+        <tr><td>Series</td><td class="n">4–5</td><td>Coding-decoding</td><td class="n">3–4</td></tr>
+        <tr><td>Direction sense</td><td class="n">4–5</td><td>Seating arrangement</td><td class="n">3–4</td></tr>
+        <tr><td>Non-verbal reasoning</td><td class="n">4–5</td><td>Analogies / classification</td><td class="n">2–4</td></tr>
+        <tr><td>Decision making</td><td class="n">3–4</td><td>Blood relation, calendar, clock</td><td class="n">1–3 each</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="gen">
+      <h3>Maths sub-topics (RRB JE CBT-1)</h3>
+      <div class="tscroll"><table><thead><tr><th>Topic</th><th>Qs</th><th>Topic</th><th>Qs</th></tr></thead><tbody>
+        <tr><td>Number system</td><td class="n">4–5</td><td>Simplification</td><td class="n">3–4</td></tr>
+        <tr><td>Percentage</td><td class="n">3–4</td><td>Time &amp; work</td><td class="n">3–4</td></tr>
+        <tr><td>Statistics</td><td class="n">3–4</td><td>Profit &amp; loss, SI/CI, ratio</td><td class="n">2–3 each</td></tr>
+        <tr><td>Time &amp; distance, average</td><td class="n">2–3 each</td><td>LCM/HCF, trigonometry</td><td class="n">1–2 each</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="gen">
+      <h3>General Science &amp; Awareness</h3>
+      <div class="tscroll"><table><thead><tr><th>Area</th><th>Qs (RRB CBT-1)</th><th>Focus</th></tr></thead><tbody>
+        <tr><td>Physics</td><td class="n">10–12</td><td>Motion, work-energy, heat, light, electricity, units</td></tr>
+        <tr><td>Chemistry</td><td class="n">8–10</td><td>Acids/bases, metals, periodic table, everyday chemistry</td></tr>
+        <tr><td>Biology</td><td class="n">8–10</td><td>Human body, nutrition, diseases</td></tr>
+        <tr><td>Current affairs</td><td class="n">4–5 (GA)</td><td>Last 6–8 months; schemes, awards, sports</td></tr>
+        <tr><td>Polity</td><td class="n">3–4 (GA)</td><td>Constitution articles, Parliament, bodies</td></tr>
+      </tbody></table></div>
+    </div>
+  </section>
+
+  <section class="sheet notes">
+    <h2>Where the numbers come from</h2>
+    <ul>
+      <li><strong>RRB JE:</strong> actual question counts averaged over three 2024–25 CBT-2 shifts (Make It Easy analysis). Theory of Machines and Machine Design got no questions in those shifts, though older papers asked about 12.</li>
+      <li><strong>SSC JE:</strong> coaching estimates for Paper 2 (100 questions) from recent papers, using the midpoint of each range (Physics Wallah). Engineering Mechanics shows up mainly in Paper 1 (8–10 Qs).</li>
+      <li><strong>Kerala PSC:</strong> official marks per module from the AE (Mechanical) syllabus, 100 marks total. Diploma-level posts like Overseer use different modules.</li>
+      <li>Sub-topic tiers are based on recurring PYQ patterns, not exact counts, since no reliable sub-topic tallies are published.</li>
+      <li>Sources: <a href="https://www.makeiteasyhub.com/rrb-je-2024-cbt-2-subject-wise-weightage-detailed-analysis-of-rrb-je-cbt-2-exam-pattern" target="_blank" rel="noopener">RRB JE CBT-2 weightage</a> · <a href="https://www.pw.live/ae-je/exams/ssc-je-mechanical-subject-wise-weightage" target="_blank" rel="noopener">SSC JE Mechanical weightage</a> · <a href="https://www.pw.live/ae-je/exams/rrb-je-subject-wise-weightage" target="_blank" rel="noopener">RRB JE CBT-1 weightage</a> · <a href="https://www.keralapsc.gov.in/sites/default/files/inline-files/24___asst_engineer_mechanical_in_universities_in_kerala.pdf" target="_blank" rel="noopener">KPSC AE Mechanical syllabus</a> · <a href="https://www.careerindia.com/news/ssc-je-recruitment-2026-1-748-posts-apply-by-september-22-065007.html" target="_blank" rel="noopener">SSC JE 2026 age limits</a> · <a href="https://www.sscdrishti.com/blog/rrb-je-recruitment-2026-notification-vacancies-exam-pattern" target="_blank" rel="noopener">RRB JE CEN 04/2026</a> · <a href="https://keralapsc.gov.in/sites/default/files/2025-01/noti-573-24.pdf" target="_blank" rel="noopener">KPSC AE notification</a> · <a href="https://pw.live/news/rrb-ntpc-recruitment-2026-notification-out-3548-graduate-vacancies-apply-online" target="_blank" rel="noopener">RRB NTPC CEN 06/2026</a> · <a href="https://www.pw.live/news/rrb-alp-recruitment-2026-notification-cen-01-2026-apply-online" target="_blank" rel="noopener">RRB ALP CEN 01/2026</a> · <a href="https://www.sarkarijobs.com/upsc-ese-recruitment-2027-notice-out-for-480-engineering-services-vacancies-apply-online-by-october-6/" target="_blank" rel="noopener">UPSC ESE 2027</a> · <a href="https://www.madeeasy.in/blog/engineering-exams-calendar" target="_blank" rel="noopener">Engineering exams calendar 2027</a> · <a href="https://testbook.com/ssc-jobs/exam-calendar" target="_blank" rel="noopener">SSC calendar 2026-27</a> · <a href="https://entri.app/blog/kerala-psc-assistant-engineer-mechanical-apply-online/" target="_blank" rel="noopener">KPSC AE Mechanical 2025 posts</a> · <a href="https://www.pw.live/ssc/exams/ib-acio-2026-notification" target="_blank" rel="noopener">IB ACIO age</a> · <a href="https://www.studyiq.com/articles/upsc-exam-date-2027/" target="_blank" rel="noopener">UPSC 2027 calendar</a> · <a href="https://www.pw.live/banking/exams/ibps-po-2026-notification-out" target="_blank" rel="noopener">IBPS PO 2026</a> · <a href="https://competition.careers360.com/articles/sbi-po-2026-notification-out-at-sbi-bank-in-apply-online-here" target="_blank" rel="noopener">SBI PO 2026</a> · <a href="https://edutap.in/news/detailed-rbi-grade-b-notification-out-on-29-april-2026/" target="_blank" rel="noopener">RBI Grade B 2026</a> · <a href="https://store.pw.live/blogs/ssc-exams/ssc-cgl-eligibility-criteria" target="_blank" rel="noopener">SSC CGL age limits</a> · <a href="https://challengerapp.in/exams/kas-2025" target="_blank" rel="noopener">KAS 2025</a> · <a href="https://www.pscpdfbanks.in/2025/01/kerala-sub-inspector-recruitment-2025.html" target="_blank" rel="noopener">Kerala SI 510/2024</a> · <a href="https://competitivecracker.com/blog/kerala-psc-assistant-motor-vehicle-inspector-notification-2026-april" target="_blank" rel="noopener">Kerala AMVI</a> · <a href="https://www.careerindia.com/news/isro-recruitment-2026-apply-for-technical-assistant-technician-065633.html" target="_blank" rel="noopener">ISRO IPRC 2026</a> · <a href="https://www.pw.live/gate/exams/drdo-ceptam-11-recruitment-2025" target="_blank" rel="noopener">DRDO CEPTAM-11</a> · <a href="https://www.mysarkarinaukri.com/en/psus-mechanical-engineering-gate/" target="_blank" rel="noopener">GATE PSU age limits</a></li>
+    </ul>
+  </section>
+</div>
+
+<script>
+const DATA = [
+ {name:"Thermal Engineering", sub:"Thermodynamics, IC engines, steam & power plant, refrigeration", rrb:12, ssc:17.5, kpsc:26,
+  why:"Biggest block overall. Kerala PSC alone gives it 26 marks (Thermodynamics 12 + Thermal Engg 14). RRB asks about 11 Qs on IC engines.",
+  t:[["H","Laws of thermodynamics, systems, properties, heat & work","Zeroth, first, second law; path vs point functions"],
+     ["H","Entropy, Carnot cycle, Clausius inequality","Including availability & irreversibility for KPSC"],
+     ["H","Air standard cycles: Otto, Diesel, Dual, Brayton","Efficiency formulas and comparisons"],
+     ["H","IC engines: 2/4-stroke, parts, performance","BP, IP, mechanical/thermal efficiency, SFC, knocking, octane & cetane"],
+     ["H","Steam properties, Rankine cycle, boilers","Fire/water tube boilers, mountings vs accessories"],
+     ["M","Fuel injection, ignition, cooling, lubrication, supercharging",""],
+     ["M","Steam nozzles & turbines","Impulse vs reaction, compounding"],
+     ["M","Air compressors","Reciprocating, volumetric efficiency, multistage"],
+     ["M","Refrigeration & air-conditioning","VCR cycle, COP, refrigerants, psychrometry"],
+     ["L","Fuels & combustion","Calorific value, air-fuel ratio"]]},
+ {name:"Production Engineering", sub:"Welding, casting, machining, forming, grinding", rrb:28, ssc:13.5, kpsc:12,
+  why:"RRB's heaviest area by far: welding ~11, machining ~9 and grinding ~7 questions per paper.",
+  t:[["H","Welding processes & defects","Arc, gas (flame types), resistance, TIG/MIG/SAW, brazing & soldering"],
+     ["H","Machining: lathe, tool geometry, chips","Merchant's circle, Taylor tool life, cutting speed & feed"],
+     ["H","Casting","Patterns & allowances, gating, sand properties, special casting, defects"],
+     ["M","Grinding & finishing","Wheel designation, honing, lapping, superfinishing"],
+     ["M","Metal forming","Forging, rolling, extrusion, drawing, sheet metal (blanking/punching)"],
+     ["M","Milling, drilling, shaping, broaching",""],
+     ["M","Unconventional machining","EDM, ECM, USM, LBM, AJM"],
+     ["L","NC/CNC and part programming","G and M codes"],
+     ["L","Jigs & fixtures, powder metallurgy",""]]},
+ {name:"Engineering Mechanics & SOM", sub:"Statics, dynamics, stress, beams, torsion", rrb:21, ssc:13.5, kpsc:12,
+  why:"Single highest subject in RRB (SOM ~13 + Mechanics ~8). Equally strong in SSC and KPSC. Numericals are short and formula-based.",
+  t:[["H","Stress, strain, Hooke's law, elastic constants","E, G, K relations; Poisson's ratio"],
+     ["H","SFD & BMD","Cantilever, simply supported, overhang; point of contraflexure"],
+     ["H","Bending & shear stress in beams","Section modulus, flexure formula"],
+     ["H","Torsion of shafts","Power transmitted, hollow vs solid"],
+     ["H","Mechanics: forces, friction, centroid, moment of inertia","Parallel/perpendicular axis theorem"],
+     ["M","Dynamics: laws of motion, work-energy, projectiles",""],
+     ["M","Thermal stress, composite bars",""],
+     ["M","Deflection of beams","Standard cases"],
+     ["M","Columns: Euler's formula, effective length",""],
+     ["M","Principal stresses, Mohr's circle",""],
+     ["M","Thin cylinders, springs",""]]},
+ {name:"Theory of Machines & Design", sub:"Mechanisms, gears, belts, failure theories", rrb:0, ssc:22.5, kpsc:14,
+  why:"Huge in SSC (TOM 12–15 + Design 8–10) and KPSC (14 marks). Skipped in RRB's 2024 shifts, but older RRB papers asked it.",
+  t:[["H","Links, pairs, mechanisms, degrees of freedom","Grubler's criterion, inversions of four-bar & slider-crank"],
+     ["H","Gears & gear trains","Terminology, interference, velocity ratio"],
+     ["H","Belts, ropes, chains","Ratio of tensions, slip, creep, max power"],
+     ["H","Theories of failure, factor of safety, fatigue","Endurance limit, stress concentration"],
+     ["M","Cams & followers",""],
+     ["M","Flywheel & governors",""],
+     ["M","Balancing & vibrations","Natural frequency, critical speed"],
+     ["M","Brakes, clutches, dynamometers",""],
+     ["M","Joints, keys, couplings, shaft design","Riveted, welded, bolted"],
+     ["L","Bearings","Rolling contact life, journal bearings"]]},
+ {name:"Industrial Engineering", sub:"Work study, inventory, PERT/CPM, quality", rrb:9, ssc:11, kpsc:12,
+  why:"Steady 9–12 questions in all three exams, and mostly theory. One of the best returns for time spent.",
+  t:[["H","Work study","Method study symbols, time study, standard time, allowances"],
+     ["H","Inventory control","EOQ, ABC/VED analysis, reorder point"],
+     ["H","PERT & CPM","Critical path, floats, expected time, variance"],
+     ["M","Production planning & control","Routing, scheduling, dispatching"],
+     ["M","Plant layout & material handling",""],
+     ["M","Quality control","Control charts (X̄, R, p, c), sampling, TQM, Six Sigma"],
+     ["M","Break-even analysis, depreciation",""],
+     ["L","Management principles","Taylor, Fayol, types of ownership (KPSC)"],
+     ["L","Forecasting, linear programming basics",""]]},
+ {name:"Fluid Mechanics & Machines", sub:"Properties, Bernoulli, pipes, turbines, pumps", rrb:10, ssc:6.5, kpsc:12,
+  why:"Asked in all three. Hydraulic machines (turbines, pumps) carry more than pure fluid mechanics in RRB.",
+  t:[["H","Fluid properties","Viscosity, surface tension, capillarity"],
+     ["H","Pressure measurement, hydrostatic force, buoyancy","Manometers, metacentric height"],
+     ["H","Bernoulli & flow measurement","Venturimeter, orifice meter, pitot tube"],
+     ["H","Hydraulic turbines","Pelton, Francis, Kaplan; specific speed"],
+     ["H","Pumps","Centrifugal (NPSH, cavitation, priming), reciprocating"],
+     ["M","Flow through pipes","Darcy-Weisbach, minor losses, Reynolds number"],
+     ["M","Fluid kinematics","Continuity, types of flow"],
+     ["L","Dimensional analysis, boundary layer, notches",""]]},
+ {name:"Material Science & Metallurgy", sub:"Iron-carbon diagram, heat treatment, steels", rrb:7, ssc:0, kpsc:12,
+  why:"12 marks in KPSC and about 7 in RRB. SSC covers steels and heat treatment inside its Production section, so this overlaps.",
+  t:[["H","Iron-carbon diagram & phases","Ferrite, austenite, cementite, pearlite, martensite"],
+     ["H","Heat treatment","Annealing, normalising, hardening, tempering, case hardening"],
+     ["H","Classification of steels & cast iron","Plain carbon, alloy, stainless, tool steel"],
+     ["M","Crystal structure","BCC, FCC, HCP; APF, coordination number"],
+     ["M","Mechanical testing","Tensile, hardness (Brinell/Rockwell/Vickers), impact, fatigue, creep"],
+     ["M","Non-destructive testing","Dye penetrant, ultrasonic, radiography, magnetic particle"],
+     ["L","Non-ferrous alloys, composites, polymers",""]]},
+ {name:"Heat Transfer", sub:"Conduction, convection, radiation, exchangers", rrb:4, ssc:9, kpsc:0,
+  why:"8–10 questions in SSC Paper 2, about 4 in RRB. In KPSC it sits inside Thermal Engineering.",
+  t:[["H","Conduction","Fourier's law, thermal resistance, composite walls, critical radius"],
+     ["M","Convection","Newton's law, Nu, Pr, Re, Gr"],
+     ["M","Radiation","Stefan-Boltzmann, black & grey bodies, Kirchhoff, Wien"],
+     ["M","Heat exchangers","LMTD, effectiveness-NTU, parallel vs counter flow"],
+     ["L","Fins",""]]},
+ {name:"Metrology & Measurements", sub:"Limits & fits, instruments, gauges", rrb:9, ssc:0, kpsc:0,
+  why:"Mostly an RRB subject (about 9 questions). Quick to finish, so do it once RRB is close.",
+  t:[["H","Limits, fits & tolerances","Hole basis vs shaft basis"],
+     ["H","Vernier, micrometer, slip gauges","Least count questions"],
+     ["M","Comparators, GO/NO-GO gauges, Taylor's principle",""],
+     ["M","Surface finish & angular measurement","Ra/CLA, sine bar"],
+     ["M","Measurement of pressure, temperature, flow, strain",""],
+     ["L","Screw thread & gear measurement",""]]}
+];
+DATA.forEach(d=>d.avg=(d.rrb+d.ssc+d.kpsc)/3);
+DATA.sort((a,b)=>b.avg-a.avg);
+
+const KEY="mech-topic-map-done";
+let done={};
+try{done=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){done={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}}
+
+const maxAvg=Math.max(...DATA.map(d=>d.avg));
+const list=document.getElementById("list");
+const fmt=v=>Number.isInteger(v)?String(v):v.toFixed(1);
+
+DATA.forEach((d,i)=>{
+  const el=document.createElement("details");
+  el.className="subj";
+  const ex=[["RRB",d.rrb],["SSC",d.ssc],["KPSC",d.kpsc]].map(([k,v])=>
+    `<div class="ex"><div class="row"><span>${k}</span><span class="num">${v?fmt(v):"—"}</span></div><div class="mini"><i style="width:${Math.min(100,v/30*100)}%"></i></div></div>`).join("");
+  const rows=d.t.map((t,j)=>{
+    const id=`s${i}-${j}`, key=d.name+"|"+t[1];
+    return `<div class="st${done[key]?" done":""}"><input type="checkbox" id="${id}" data-key="${key.replace(/"/g,"&quot;")}"${done[key]?" checked":""}><label for="${id}">${t[1]}${t[2]?`<small>${t[2]}</small>`:""}</label><span class="tier ${t[0]}">${{H:"HIGH",M:"MED",L:"LOW"}[t[0]]}</span></div>`;
+  }).join("");
+  el.innerHTML=`<summary><div class="rank">${i+1}</div><div class="shead">
+    <div class="stitle"><h3>${d.name}</h3><span class="pct">${d.avg.toFixed(1)}%<small> avg</small></span></div>
+    <div class="cbar"><i style="width:${d.avg/maxAvg*100}%"></i></div>
+    <div class="exams">${ex}</div>
+    <div class="meta"><span>${d.sub}</span><span><span class="tick" data-count></span> <span class="chev">›</span></span></div>
+  </div></summary><div class="body"><p class="why">${d.why}</p>${rows}</div>`;
+  list.appendChild(el);
+});
+
+function refresh(){
+  let total=0,dn=0;
+  document.querySelectorAll(".subj").forEach(s=>{
+    const boxes=s.querySelectorAll("input[type=checkbox]");
+    const c=[...boxes].filter(b=>b.checked).length;
+    total+=boxes.length; dn+=c;
+    s.querySelector("[data-count]").textContent=`${c}/${boxes.length}`;
+  });
+  document.getElementById("progTxt").textContent=`${dn} / ${total} sub-topics done`;
+  document.getElementById("progBar").style.width=(total?dn/total*100:0)+"%";
+}
+list.addEventListener("change",e=>{
+  const b=e.target; if(b.type!=="checkbox")return;
+  if(b.checked)done[b.dataset.key]=1; else delete done[b.dataset.key];
+  b.closest(".st").classList.toggle("done",b.checked);
+  save(); refresh();
+});
+refresh();
+document.querySelector(".subj").open=true;
+
+
+/* ---------- exam directory ---------- */
+// st: now = apply now, last = last chance, open = eligible for years, edge = borderline, closed = too old
+const EXAMS=[
+ {n:"RRB NTPC Graduate",b:"Railway Recruitment Boards",k:"N",t:"B",st:"now",q:"Any degree",a:"18–33 on 1 Jan",y:"Until about 2031",nx:"Open now: apply by 6 Nov 2026",o:"Station master, goods guard, clerk posts. Same maths/reasoning/GA as RRB JE CBT-1."},
+ {n:"RRB JE",b:"Railway Recruitment Boards",k:"T",t:"A",st:"open",q:"Mech degree or diploma",a:"18–33 on 1 Jan",y:"Until about 2031 (4–5 cycles)",nx:"Jul–Aug 2027",o:"The paper your topic map is built around."},
+ {n:"SSC JE (Mechanical)",b:"Staff Selection Commission",k:"T",t:"A",st:"last",q:"Mech degree or diploma",a:"Up to 30 on 1 Aug (CWC, MES, BRO, DGQA)",y:"2027 only",nx:"Mar–Sep 2027",o:"Paper 1 adds reasoning and GA (100 marks)."},
+ {n:"RRB ALP",b:"Railway Recruitment Boards",k:"T",t:"A",st:"last",q:"Mech diploma/degree accepted in lieu of ITI",a:"18–30 on 1 Jul",y:"2027 only",nx:"Feb–May 2027",o:"Assistant Loco Pilot. Large intake (11,127 posts in 2026)."},
+ {n:"UPSC ESE (Mechanical)",b:"UPSC",k:"T",t:"A",st:"last",q:"B.Tech only",a:"21–30 on 1 Jan",y:"ESE 2028 only",nx:"Notification ~Sep 2027, prelims ~Feb 2028",o:"Group A engineering posts. Much tougher, but the same core subjects."},
+ {n:"Kerala PSC Assistant Engineer (Mech)",b:"Kerala PSC: Irrigation, Ports, KWA, universities, corporations",k:"T",t:"A",st:"open",q:"B.Tech Mechanical",a:"18–36 (some corporations 39)",y:"Until about 2034",nx:"Irregular; check monthly gazette",o:"Recent posts: 539/2025, 541/2025, 276/2024. KWA AE also takes mechanical."},
+ {n:"Kerala PSC Overseer / Draftsman / Sub Engineer (Mech)",b:"Kerala PSC",k:"T",t:"A",st:"open",q:"Diploma (check whether B.Tech is accepted for each post)",a:"18–36",y:"Until about 2034",nx:"Irregular",o:"Diploma-level posts; more vacancies than AE."},
+ {n:"Kerala PSC Assistant Motor Vehicle Inspector",b:"Kerala PSC, Motor Vehicles Dept",k:"T",t:"A",st:"open",q:"Diploma in Auto/Mech + motorcycle, HGV and HPV licences",a:"21–36",y:"Until about 2034",nx:"Expected 2026–27",o:"Popular Kerala technical post. Start the heavy-vehicle licences early if you want it."},
+ {n:"ISRO Technical Assistant (VSSC, LPSC, IPRC)",b:"ISRO centres",k:"T",t:"A",st:"open",q:"Mech diploma",a:"18–35",y:"Until about 2033",nx:"Several ads a year; IPRC closed 5 Oct 2026",o:"VSSC and LPSC are in Thiruvananthapuram."},
+ {n:"PSUs through GATE (ONGC)",b:"ONGC and a few others",k:"T",t:"A",st:"edge",q:"B.Tech + GATE score",a:"ONGC up to 30; most PSUs 25–28",y:"Borderline: GATE 2028 for ONGC only",nx:"GATE 2028 registration Aug–Sep 2027",o:"GATE 2027 registration has closed. Most PSUs are already above your age."},
+ {n:"Contract engineer posts (Cochin Shipyard, BEL and similar)",b:"Central PSUs",k:"T",t:"A",st:"open",q:"Mech degree or diploma",a:"Usually 30–35 on contract posts",y:"Varies by advert",nx:"Ad hoc",o:"Project officer and supervisor roles. Not permanent, but paid experience."},
+ {n:"Lecturer in Mechanical (Govt polytechnic)",b:"Kerala PSC",k:"T",t:"A",st:"open",q:"B.Tech first class",a:"Check notification",y:"Check notification",nx:"Roughly every 4 years",o:"Last major notification was 065/2021."},
+ {n:"SSC CGL",b:"Staff Selection Commission",k:"N",t:"B",st:"last",q:"Any degree (JSO needs 60% maths in 12th or stats)",a:"Inspector/ASO up to 30; JSO up to 32 on 1 Aug",y:"2027 for 30-limit posts; JSO till about 2029",nx:"May–Jun 2027",o:"Inspector (GST, Excise, Income Tax), ASO, CBI SI."},
+ {n:"RRB Section Controller",b:"Railway Recruitment Boards",k:"N",t:"B",st:"open",q:"Any degree",a:"20–33",y:"Until about 2031",nx:"Irregular",o:"Same pattern as NTPC."},
+ {n:"UPSC Civil Services (IAS, IPS) + Indian Forest Service",b:"UPSC",k:"N",t:"D",st:"open",q:"Any degree (IFoS accepts engineering)",a:"21–32 on 1 Aug, 6 attempts",y:"CSE 2027, 2028, 2029 (3 attempts)",nx:"Notification 13 Jan 2027, prelims 23 May 2027",o:"Needs a year or more of full-time prep."},
+ {n:"Kerala Administrative Service (KAS)",b:"Kerala PSC",k:"N",t:"D",st:"open",q:"Any degree",a:"21–32 on 1 Jan",y:"Notifications up to about 2029",nx:"Irregular (2019, then 2025)",o:"Kerala's state civil service."},
+ {n:"Kerala PSC Sub Inspector of Police",b:"Kerala PSC",k:"N",t:"D",st:"open",q:"Any degree + physical test",a:"20–31 on 1 Jan",y:"Notifications up to about 2029",nx:"Irregular (last 510/2024)",o:"Height 165.1 cm for men, five of eight physical events."},
+ {n:"SBI PO",b:"State Bank of India",k:"N",t:"C",st:"open",q:"Any degree",a:"21–30 (reckoned 1 Apr recently)",y:"2027, and 2028 if the 1 Apr rule holds",nx:"Jun–Jul 2027",o:"2026 cycle closed 8 Jul 2026."},
+ {n:"IBPS PO",b:"IBPS (public sector banks)",k:"N",t:"C",st:"last",q:"Any degree",a:"20–30",y:"2027 only",nx:"Jul 2027",o:"2026 cycle closed 21 Jul 2026."},
+ {n:"RBI Grade B",b:"Reserve Bank of India",k:"N",t:"C",st:"last",q:"Degree with 60%",a:"21–30",y:"2027 only",nx:"Apr–May 2027",o:"Tough, but one of the best-paid officer jobs."},
+ {n:"LIC AAO / NIACL AO / NABARD Grade A",b:"Insurance and development banks",k:"N",t:"C",st:"open",q:"Any degree; specialist streams for engineers in some cycles",a:"Usually 21–30",y:"Through 2027",nx:"Varies; check each",o:"Same prep as SBI/IBPS PO."},
+ {n:"Kerala PSC degree-level prelims",b:"Kerala PSC",k:"N",t:"E",st:"open",q:"Any degree",a:"18–36",y:"Until about 2034",nx:"Every 1–2 years",o:"Secretariat Assistant, University Assistant and similar posts."},
+ {n:"IB ACIO Grade II",b:"Intelligence Bureau",k:"N",t:"B",st:"closed",q:"Any degree",a:"18–27",y:"Already over the limit",nx:"—",o:"Closed for you, as are IB Security Assistant posts."},
+ {n:"SSC CHSL / MTS / Group C CGL posts",b:"Staff Selection Commission",k:"N",t:"B",st:"closed",q:"12th / degree",a:"18–27",y:"Already over the limit",nx:"—",o:""},
+ {n:"Defence officer entries (CDS, AFCAT, SSC Tech, CAPF AC)",b:"UPSC / Armed forces",k:"N",t:"D",st:"closed",q:"Degree",a:"Up to 25–27",y:"Already over the limit",nx:"—",o:""},
+ {n:"Bank clerk (IBPS, SBI), RBI Assistant",b:"Banks",k:"N",t:"C",st:"closed",q:"Any degree",a:"20–28",y:"Over the limit by the next cycle",nx:"—",o:""},
+ {n:"DRDO CEPTAM STA-B",b:"DRDO",k:"T",t:"A",st:"closed",q:"Mech diploma",a:"18–28",y:"Over the limit by the next cycle",nx:"—",o:""},
+ {n:"Most GATE PSUs (BPCL, HPCL, IOCL, NTPC, BHEL, SAIL, GAIL)",b:"Central PSUs",k:"T",t:"A",st:"closed",q:"B.Tech + GATE",a:"25–28",y:"Already over the limit",nx:"—",o:""},
+ {n:"ISRO Scientist/Engineer 'SC' (ICRB)",b:"ISRO",k:"T",t:"A",st:"closed",q:"B.Tech 65%",a:"Up to 28",y:"Over the limit by the next cycle",nx:"—",o:""}
+];
+const ST={now:["Apply now","now"],last:["Last chance","last"],open:["Open for years","rec"],edge:["Borderline","watch"],closed:["Too old","no"]};
+const dir=document.getElementById("dir");
+const isOpen=e=>e.st!=="closed";
+document.getElementById("cntT").textContent=EXAMS.filter(e=>e.k==="T"&&isOpen(e)).length;
+document.getElementById("cntN").textContent=EXAMS.filter(e=>e.k==="N"&&isOpen(e)).length;
+document.getElementById("cntC").textContent=EXAMS.filter(e=>!isOpen(e)).length;
+const order={now:0,last:1,open:2,edge:3,closed:4};
+function renderDir(f){
+  let rows=EXAMS.filter(e=>f==="all"?true:f==="open"?isOpen(e):f==="closed"?!isOpen(e):f==="last"?(e.st==="last"||e.st==="now"):(e.k===f&&isOpen(e)));
+  rows.sort((a,b)=>order[a.st]-order[b.st]||a.t.localeCompare(b.t));
+  dir.innerHTML=rows.length?rows.map(e=>`<div class="ex2${e.st==="closed"?" closed":""}">
+    <div><h4><span class="trkb">${e.t}</span>${e.n}</h4><span class="sub">${e.k==="T"?"Technical":"Non-technical"} · ${e.b}</span></div>
+    <span class="chip ${ST[e.st][1]}">${ST[e.st][0]}</span>
+    <div class="info"><div><span>Qualification</span>${e.q}</div><div><span>Age rule</span>${e.a}</div><div><span>Your window</span>${e.y}</div><div><span>Next</span>${e.nx}</div></div>
+    ${e.o?`<p class="note">${e.o}</p>`:""}</div>`).join(""):'<div class="empty">No exams match this filter.</div>';
+}
+document.querySelectorAll(".filters button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  renderDir(b.dataset.f);
+}));
+renderDir("open");
+
+const tabs=[["tab-all","pane-all"],["tab-cal","pane-cal"],["tab-tech","pane-tech"],["tab-gen","pane-gen"]];
+tabs.forEach(([t,p])=>document.getElementById(t).addEventListener("click",()=>{
+  tabs.forEach(([t2,p2])=>{const on=t2===t;document.getElementById(t2).setAttribute("aria-selected",on);const pane=document.getElementById(p2);pane.hidden=!on;if(on)pane.style.display="flex";});
+}));
+</script>
+
+</body></html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mech JE Study Guides</title>
+<meta name="description" content="Study guides for Mechanical JE exams (RRB JE, SSC JE, Kerala PSC AE), one topic at a time, from basics to timed mocks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* Home: the subjects as a ranked parts list. Each finished level is a button straight into that level. */
+.home{max-width:920px;margin:0 auto;padding:20px 16px 64px;display:flex;flex-direction:column;gap:16px}
+.hero{padding:22px clamp(16px,4vw,32px)}
+.hero h1{margin:0 0 8px;font-size:clamp(34px,7vw,50px);line-height:1.02}
+.hero p{margin:0;max-width:64ch;color:var(--muted)}
+.hero p+p{margin-top:8px}
+.label{font:600 11px/1.2 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.topics{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.topic{display:grid;grid-template-columns:56px minmax(0,1fr)}
+.topic .rank{display:flex;align-items:center;justify-content:center;border-right:1.5px solid var(--ink);background:var(--paper);font:700 26px/1 var(--display)}
+.topic .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.topic .head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.topic h2{margin:0;font-size:25px;line-height:1.1}
+.topic h2 a{color:var(--ink);text-decoration:none}
+.topic h2 a:hover{color:var(--accent)}
+.topic .share{font:600 18px/1 var(--mono);color:var(--accent);white-space:nowrap}
+.topic .share small{font-size:11px;color:var(--muted);font-weight:400}
+.topic .what{margin:-4px 0 0;color:var(--muted);font-size:15px;line-height:1.4}
+.lv{display:flex;flex-wrap:wrap;gap:8px}
+.lv a{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 12px;border:1.5px solid var(--ink);background:var(--sheet);color:var(--ink);font:600 14px var(--body);text-decoration:none}
+.lv a:hover{background:var(--accent-soft)}
+.lv a b{font:600 12px var(--mono);color:var(--muted)}
+.state{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:14px;color:var(--muted)}
+.badge{font:600 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:5px 7px;border:1px solid currentColor;white-space:nowrap}
+.badge.next{color:var(--accent);background:var(--accent-soft)}
+.badge.todo{color:var(--muted)}
+.prog{font:600 13px var(--mono);color:var(--done)}
+.topic.todo h2{color:var(--muted)}
+.foot{padding:14px 16px;font-size:14px;color:var(--muted)}
+.foot p{margin:0}
+.foot p+p{margin-top:6px}
+@media (max-width:520px){.topic{grid-template-columns:40px minmax(0,1fr)}.topic .rank{font-size:21px}.topic .head{flex-direction:column;gap:4px}.topic h2{font-size:23px}}
+</style>
+</head>
+<body>
+<nav class="topbar" aria-label="Site">
+  <div class="in">
+    <span class="ttl">Mech JE Study Guides</span>
+    <a class="link" href="exam-plan/">Exam plan</a>
+  </div>
+</nav>
+
+<main class="home">
+  <header class="sheet hero">
+    <span class="label">Choose a topic</span>
+    <h1>Mech JE Study Guides</h1>
+    <p>Pick a topic and start at Level 1. Each level builds on the one before: basics, then the theory in depth, then tricky questions, then timed mocks.</p>
+    <p>Topics are ranked by their average share of the technical questions in RRB JE, SSC JE and Kerala PSC AE, so the ones at the top are worth the most marks.</p>
+  </header>
+
+  <ol class="topics">
+    <li class="sheet topic">
+      <div class="rank">1</div>
+      <div class="body">
+        <div class="head"><h2><a href="thermal-engineering/">Thermal Engineering</a></h2><span class="share">18.3%<small> avg</small></span></div>
+        <p class="what">Thermodynamics, IC engines, steam and power plant, refrigeration</p>
+        <div class="lv">
+          <a href="thermal-engineering/"><b>1</b>Basics</a>
+          <a href="thermal-engineering/level-2/"><b>2</b>Theory</a>
+          <a href="thermal-engineering/level-3/"><b>3</b>Tricky questions</a>
+          <a href="thermal-engineering/level-4/"><b>4</b>Exam room</a>
+        </div>
+        <div class="state"><span class="badge">All 4 levels</span><span class="prog" data-progress="thermal-engineering/" hidden></span></div>
+      </div>
+    </li>
+    <li class="sheet topic">
+      <div class="rank">2</div>
+      <div class="body">
+        <div class="head"><h2><a href="production-engineering/">Production Engineering</a></h2><span class="share">17.7%<small> avg</small></span></div>
+        <p class="what">Welding, casting, machining, forming, grinding</p>
+        <div class="lv">
+          <a href="production-engineering/"><b>1</b>Basics</a>
+        </div>
+        <div class="state"><span class="badge next">Next up</span>Levels 2 to 4 are being written.<span class="prog" data-progress="production-engineering/" hidden></span></div>
+      </div>
+    </li>
+    <li class="sheet topic todo">
+      <div class="rank">3</div>
+      <div class="body">
+        <div class="head"><h2>Engineering Mechanics &amp; SOM</h2><span class="share">15.3%<small> avg</small></span></div>
+        <p class="what">Statics, dynamics, stress, beams, torsion</p>
+        <div class="state"><span class="badge todo">Not started</span></div>
+      </div>
+    </li>
+    <li class="sheet topic todo">
+      <div class="rank">4</div>
+      <div class="body">
+        <div class="head"><h2>Theory of Machines &amp; Design</h2><span class="share">12.0%<small> avg</small></span></div>
+        <p class="what">Mechanisms, gears, belts, failure theories</p>
+        <div class="state"><span class="badge todo">Not started</span></div>
+      </div>
+    </li>
+    <li class="sheet topic todo">
+      <div class="rank">5</div>
+      <div class="body">
+        <div class="head"><h2>Industrial Engineering</h2><span class="share">10.7%<small> avg</small></span></div>
+        <p class="what">Work study, inventory, PERT/CPM, quality</p>
+        <div class="state"><span class="badge todo">Not started</span></div>
+      </div>
+    </li>
+    <li class="sheet topic todo">
+      <div class="rank">6</div>
+      <div class="body">
+        <div class="head"><h2>Fluid Mechanics &amp; Machines</h2><span class="share">9.3%<small> avg</small></span></div>
+        <p class="what">Properties, Bernoulli, pipes, turbines, pumps</p>
+        <div class="state"><span class="badge todo">Not started</span></div>
+      </div>
+    </li>
+    <li class="sheet topic todo">
+      <div class="rank">7</div>
+      <div class="body">
+        <div class="head"><h2>Material Science &amp; Metallurgy</h2><span class="share">6.3%<small> avg</small></span></div>
+        <p class="what">Iron-carbon diagram, heat treatment, steels</p>
+        <div class="state"><span class="badge todo">Not started</span></div>
+      </div>
+    </li>
+    <li class="sheet topic todo">
+      <div class="rank">8</div>
+      <div class="body">
+        <div class="head"><h2>Heat Transfer</h2><span class="share">4.3%<small> avg</small></span></div>
+        <p class="what">Conduction, convection, radiation, exchangers</p>
+        <div class="state"><span class="badge todo">Not started</span></div>
+      </div>
+    </li>
+    <li class="sheet topic todo">
+      <div class="rank">9</div>
+      <div class="body">
+        <div class="head"><h2>Metrology &amp; Measurements</h2><span class="share">3.0%<small> avg</small></span></div>
+        <p class="what">Limits and fits, instruments, gauges</p>
+        <div class="state"><span class="badge todo">Not started</span></div>
+      </div>
+    </li>
+  </ol>
+
+  <footer class="sheet foot">
+    <p>The share is the average percentage of technical questions each subject got across the three exams. The <a href="exam-plan/">exam plan</a> has the full breakdown, the exam timeline and a sub-topic checklist.</p>
+    <p>Test scores are saved in this browser only.</p>
+  </footer>
+</main>
+
+<script>
+// Shows tests taken and the best mock score for each topic, from the scores the guides save in this browser.
+(() => {
+  const STORE = "study-guide-tests";
+  let all = {};
+  try { all = JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { return; }
+  const fmt = x => (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, "");
+  document.querySelectorAll("[data-progress]").forEach(p => {
+    const base = new URL(p.dataset.progress, location.href).pathname;
+    let tests = 0, best = null;
+    for (const [key, rec] of Object.entries(all)) {
+      if (!key.startsWith(base) || !rec || !Array.isArray(rec.hist)) continue;
+      tests += rec.hist.length;
+      if (/#mock/i.test(key)) rec.hist.forEach(h => { if (!best || h.score > best.score) best = h; });
+    }
+    if (!tests) return;
+    p.textContent = tests + (tests > 1 ? " tests" : " test") + " taken" + (best ? " · best mock " + fmt(best.score) + "/" + best.n : "");
+    p.hidden = false;
+  });
+})();
+</script>
+</body>
+</html>
