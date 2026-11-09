@@ -89,7 +89,13 @@
     // #sec-3 (from another level) opens topic 3; any other hash is a heading id
     const sec = location.hash.match(/^#sec-(\d+)$/);
     const target = sec ? doc.querySelector('h2[data-n="' + sec[1] + '"]') : location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if (target) target.scrollIntoView();
+    if (target) {
+      target.scrollIntoView();
+      // Fonts and formulas can finish loading after this and push the heading down, so jump again once they
+      // have, unless the reader has already scrolled away.
+      const y = scrollY;
+      document.fonts.ready.then(() => { if (Math.abs(scrollY - y) < 2) target.scrollIntoView(); });
+    }
   }).catch(() => {
     doc.innerHTML = '<p class="status">Could not load this guide. If you opened the file directly, serve the folder over http (for example <code>python -m http.server</code>) or use the GitHub page.</p>';
   });
