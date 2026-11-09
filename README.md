@@ -15,6 +15,7 @@ The home page lists the nine technical subjects, ranked by their average share o
 | --- | --- |
 | [Thermal Engineering](https://rohith-s98.github.io/mech-je/thermal-engineering/) | 1 to 4 |
 | [Production Engineering](https://rohith-s98.github.io/mech-je/production-engineering/) | 1 to 4 |
+| [Engineering Mechanics & SOM](https://rohith-s98.github.io/mech-je/engineering-mechanics/) | 1 |
 
 The [exam plan](https://rohith-s98.github.io/mech-je/exam-plan/) has the exam timeline, age limits and a sub-topic checklist for every subject.
 
@@ -22,14 +23,14 @@ The [exam plan](https://rohith-s98.github.io/mech-je/exam-plan/) has the exam ti
 
 - `index.html`: the home page where you choose a topic.
 - `assets/reader.js` and `assets/site.css`: one reader and one stylesheet shared by every guide. The reader loads the `README.md` next to each page and adds formulas, a contents list, the level switch, a Hide answers button and test mode.
-- `thermal-engineering/`, `production-engineering/`: one folder per topic. Each holds `index.html` and `README.md` (the guide). Higher levels sit in `level-2/`, `level-3/` and `level-4/` inside the topic folder.
+- `thermal-engineering/`, `production-engineering/`, `engineering-mechanics/`: one folder per topic. Each holds `index.html` and `README.md` (the guide). Higher levels sit in `level-2/`, `level-3/` and `level-4/` inside the topic folder.
 - `exam-plan/`: the exam plan page.
 - `.nojekyll`: makes GitHub Pages serve the files exactly as they are.
 
 ## Adding a topic
 
 1. Write the guide in Claude as a doc and export it as Markdown.
-2. Make a folder named after the topic, for example `engineering-mechanics/`. Copy `production-engineering/index.html` into it and save the export there as `README.md`. Change any ` ```latex ` fences to ` ```math `.
+2. Make a folder named after the topic, for example `theory-of-machines/`. Copy `engineering-mechanics/index.html` into it and save the export there as `README.md`. Change any ` ```latex ` fences to ` ```math `.
 3. On the home page (`index.html`), turn the topic's card from "Not started" into links to its levels, and add it to the table above.
 4. Commit and push. The page is live a minute or two later.
 
