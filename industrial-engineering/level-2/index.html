@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<!-- This page shows README.md from the same folder: the guide lives there, and GitHub shows it on the repo page too. -->
+<nav class="topbar" aria-label="Guide">
+  <div class="in">
+    <span class="ttl" id="ttl"></span>
+    <div class="levels" role="group" aria-label="Guide level">
+      <a href="../" data-topics data-cue="Basics of this topic">Level 1<span class="sub"> · Basics</span></a>
+      <a href="./" aria-current="page" data-topics data-cue="Theory of this topic in depth">Level 2<span class="sub"> · Theory</span></a>
+    </div>
+    <a class="link" href="../../">All topics</a>
+    <button class="btn" id="hide" type="button" aria-pressed="false">Hide answers</button>
+  </div>
+</nav>
+<div class="reader">
+  <details class="sheet toc" id="toc" open><summary>Contents</summary><ol id="tocl"></ol></details>
+  <article class="sheet doc" id="doc"><p class="status">Loading…</p></article>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="../../assets/reader.js"></script>
+</body>
+</html>
