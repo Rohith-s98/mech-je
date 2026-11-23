@@ -18,6 +18,7 @@ The home page lists the nine technical subjects, ranked by their average share o
 | [Engineering Mechanics & SOM](https://rohith-s98.github.io/mech-je/engineering-mechanics/) | 1 to 4 |
 | [Theory of Machines & Design](https://rohith-s98.github.io/mech-je/theory-of-machines/) | 1 to 4 |
 | [Industrial Engineering](https://rohith-s98.github.io/mech-je/industrial-engineering/) | 1 to 4 |
+| [Fluid Mechanics & Machines](https://rohith-s98.github.io/mech-je/fluid-mechanics/) | 1 |
 
 The [exam plan](https://rohith-s98.github.io/mech-je/exam-plan/) has the exam timeline, age limits and a sub-topic checklist for every subject.
 
@@ -25,7 +26,7 @@ The [exam plan](https://rohith-s98.github.io/mech-je/exam-plan/) has the exam ti
 
 - `index.html`: the home page where you choose a topic.
 - `assets/reader.js` and `assets/site.css`: one reader and one stylesheet shared by every guide. The reader loads the `README.md` next to each page and adds formulas, a contents list, the level switch, a Hide answers button and test mode.
-- `thermal-engineering/`, `production-engineering/`, `engineering-mechanics/`, `theory-of-machines/`, `industrial-engineering/`: one folder per topic. Each holds `index.html` and `README.md` (the guide). Higher levels sit in `level-2/`, `level-3/` and `level-4/` inside the topic folder.
+- `thermal-engineering/`, `production-engineering/`, `engineering-mechanics/`, `theory-of-machines/`, `industrial-engineering/`, `fluid-mechanics/`: one folder per topic. Each holds `index.html` and `README.md` (the guide). Higher levels sit in `level-2/`, `level-3/` and `level-4/` inside the topic folder.
 - `exam-plan/`: the exam plan page.
 - `.nojekyll`: makes GitHub Pages serve the files exactly as they are.
 
