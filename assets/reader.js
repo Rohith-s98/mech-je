@@ -15,6 +15,18 @@
   const onTopicLevel = here < 0 || ti > -1;
   const levelName = a => a.firstChild.textContent.trim();
 
+  // The sticky top bar wraps to two rows on phones. Keep its height in --bar so links (and the stylesheet's
+  // scroll-padding) land headings just under it instead of behind it.
+  const bar = document.querySelector(".topbar");
+  let barH = 52;
+  const setBar = () => {
+    if (!bar) return;
+    barH = bar.getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--bar", barH + "px");
+  };
+  setBar();
+  if (bar && window.ResizeObserver) new ResizeObserver(setBar).observe(bar); else addEventListener("resize", setBar);
+
   fetch("README.md").then(r => { if (!r.ok) throw new Error(r.status); return r.text(); }).then(md => {
     doc.innerHTML = DOMPurify.sanitize(marked.parse(md));
     const h1 = doc.querySelector("h1");
@@ -81,7 +93,7 @@
     fit(); narrow.addEventListener("change", fit);
     const spy = () => {
       let cur = links[0];
-      links.forEach(l => { if (l[0].getBoundingClientRect().top < 120) cur = l; });
+      links.forEach(l => { if (l[0].getBoundingClientRect().top < barH + 66) cur = l; });
       links.forEach(l => l[1].classList.toggle("on", l === cur));
     };
     addEventListener("scroll", spy, { passive: true }); spy();

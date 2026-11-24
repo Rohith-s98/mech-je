@@ -15,7 +15,8 @@
   color-scheme:dark}}
 
 *{box-sizing:border-box}
-html{scroll-padding-top:64px}
+/* Links land headings just under the sticky top bar; reader.js sets --bar to its real height (two rows on phones) */
+html{scroll-padding-top:calc(var(--bar,52px) + 12px)}
 body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--body);
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
   background-size:24px 24px;background-position:-1px -1px}
