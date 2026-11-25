@@ -19,7 +19,7 @@ The home page lists the nine technical subjects, ranked by their average share o
 | [Theory of Machines & Design](https://rohith-s98.github.io/mech-je/theory-of-machines/) | 1 to 4 |
 | [Industrial Engineering](https://rohith-s98.github.io/mech-je/industrial-engineering/) | 1 to 4 |
 | [Fluid Mechanics & Machines](https://rohith-s98.github.io/mech-je/fluid-mechanics/) | 1 to 4 |
-| [Material Science & Metallurgy](https://rohith-s98.github.io/mech-je/material-science/) | 1 to 3 |
+| [Material Science & Metallurgy](https://rohith-s98.github.io/mech-je/material-science/) | 1 to 4 |
 
 The [exam plan](https://rohith-s98.github.io/mech-je/exam-plan/) has the exam timeline, age limits and a sub-topic checklist for every subject.
 
